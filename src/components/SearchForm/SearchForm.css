@@ -2,6 +2,7 @@
   display: flex;
   border-bottom: 1px solid #9f9f9f;
   grid-column: 1/1;
+  border-right: 1px solid #9f9f9f;
 }
 
 .form {

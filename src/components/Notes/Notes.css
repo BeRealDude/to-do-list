@@ -1,11 +1,12 @@
 .notes{
   display: grid;
-  width: 200px;
+  width: 100%;
   border-right: 1px solid #9f9f9f;
+  grid-template-columns: min-content auto;
 }
 
 .notes__btn {
-  width: 200px;
+  width: 201px;
     height: 54px;
     font-size: 14px;
     font-weight: 400;
@@ -15,6 +16,7 @@
     padding: 0;
     margin: 0;
     border-bottom: 1px solid #9f9f9f;
+    border-right: 1px solid #9f9f9f;
 }
 
 .notes__btn:hover {

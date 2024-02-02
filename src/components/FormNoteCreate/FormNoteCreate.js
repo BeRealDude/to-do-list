@@ -1,79 +1,92 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./FormNoteCreate.css";
 import { v4 as uuidv4 } from 'uuid';
 
-function FormNoteCreate({ entryData, openEntryData, selectedNote }) {
+function FormNoteCreate({ entryData, openEntryData, selectedNote, notes }) {
   const [name, setName] = useState("");
   const [text, setText] = useState("");
-  // const [values, setValues] = useState({});
-
-  // const handleChangeName = (e) => {
-  //   setName(e.target.value);
-  // };
-
-  // const handleChangeText = (e) => {
-  //   setText(e.target.value);
-  // };
+  const nameTextAreaRef = useRef(null);
+  const textTextAreaRef = useRef(null);
 
 
 
-
-  // useEffect(() => {
-  //   if (selectedNote) {
-  //     // setValues(selectedNote);
-  //     setName(selectedNote.name)
-  //     setText(selectedNote.text)
-  //   }
-  // }, [openEntryData]);
-
-// console.log(selectedNote)
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    entryData({
-      name: name,
-      text: text,
-      id: uuidv4()
-    });
-    setName('')
-    setText('')
-    // console.log(selectedNote.id)
-
+useEffect(() => {
+  if(selectedNote){
+    setName(selectedNote.name);
+    setText(selectedNote.text);
+    autoResize(nameTextAreaRef);
+    autoResize(textTextAreaRef);
   }
+}, [selectedNote]);
+
+
+useEffect(() => {
+  autoResize(nameTextAreaRef);
+}, [name]);
+
+useEffect(() => {
+  autoResize(textTextAreaRef);
+}, [text]);
+
+
+
+const handleNameChange = (e) => {
+  setName(e.target.value);
+  entryData({ ...selectedNote, name: e.target.value });
+};
+
+
+
+const handleTextChange = (e) => {
+  setText(e.target.value);
+  entryData({ ...selectedNote, text: e.target.value });
+};
+
+
+const autoResize = (textAreaRef) => {
+  if (textAreaRef.current) {
+    textAreaRef.current.style.height = "auto";
+    textAreaRef.current.style.height = (textAreaRef.current.scrollHeight) + "px";
+  }
+};
 
   return (
     <section className="noteCreate">
       <div className="noteCreate-container">
-
-        {openEntryData ? <form
-          className="form-create"
-          id="form-create"
-          name="form-create"
-          noValidate
-          onSubmit={handleSubmit}
-        >
-          <input
-            className="form-create__input"
-            value={name || ""}
-            onChange={e => setName(e.target.value)}
-            type="text"
-            name="form-create-name"
-            id="form-create-name"
-            // required
-            placeholder="Название"
-          />
-          <input
-            className="form-create__input"
-            value={text || ""}
-            onChange={e => setText(e.target.value)}
-            type="text"
-            name="form-create-text"
-            id="form-create-text"
-            // required
-            placeholder="Текст"
-          />
-          <button className="form-create__btn" type="submit">Submit</button>
-        </form> : <span>Заметка не выбрана</span>}
+        {openEntryData ? (
+          <form
+            className="form-create"
+            id="form-create"
+            name="form-create"
+            noValidate
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <textarea
+              ref={nameTextAreaRef}
+              className="form-create__input"
+              value={name || ""}
+              onChange={handleNameChange}
+              type="text"
+              name="form-create-name"
+              id="form-create-name"
+              placeholder="Название"
+              onInput={autoResize}
+            />
+            <textarea
+              ref={textTextAreaRef}
+              className="form-create__input"
+              value={text || ""}
+              onChange={handleTextChange}
+              type="text"
+              name="form-create-text"
+              id="form-create-text"
+              placeholder="Текст"
+              autoFocus
+            />
+          </form>
+        ) : (
+          <span>Заметка не выбрана</span>
+        )}
       </div>
     </section>
   );

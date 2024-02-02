@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
-import Main from '../Main/Main';
 
 import { v4 as uuidv4 } from 'uuid';
-
+import Notes from '../Notes/Notes';
+import { addWeeks, addDays } from 'date-fns';
 import './App.css';
+
 
 
 function App() {
@@ -16,35 +17,42 @@ function App() {
 
   const [notes, setNotes] = useState([]);
 
-  const [selectedNote, setSelectedNote] = useState();
-    // const [newNotes, setNewNotes] = useState([]);
+  const [selectedNote, setSelectedNote] = useState({});
+
 
   const [openEntryData, setOpenEntryData] = useState(false);
 
+  function openFormEntryData(note) {
+    setOpenEntryData(true);
+    setSelectedNote(note);
+
+  }
 
 
   function addNote() {
 
+    const newNote = { id: uuidv4(), name: '', text: '', createdAt: new Date() };
+    openFormEntryData(newNote);
+    setSelectedNote(newNote);
+    setNotes([newNote, ...notes]);
 
-    setOpenEntryData(true);
   }
 
   function entryData(note) {
-
-    setNotes([note, ...notes]);
-    // setNotes([note, ...notes]);
-    // setSelectedNote(note);
-
+    const currentDate = new Date();
+    const updatedNotes = [...notes];
+    const index = updatedNotes.findIndex((n) => n.id === note.id);
+    if (index !== -1) {
+      updatedNotes.splice(index, 1);
+    }
+    updatedNotes.unshift({ ...note, createdAt: currentDate });
+    setNotes(updatedNotes);
+    setSelectedNote({ ...note, createdAt: currentDate });
   }
-  console.log(notes)
 
 
 
-  // function openFormEntryData(note) {
-  //   setOpenEntryData(true);
-  //   // setSelectedNote(note);
 
-  // }
 
   const notesStor = JSON.parse(localStorage.getItem("notes"));
 
@@ -66,12 +74,11 @@ function App() {
     console.log("Сохранено в localStorage:", notes);
     }
 
-  }, [notes]);
+  }, [notes, setSelectedNote]);
 
 
 
-
-
+// localStorage.clear()
 
 
 
@@ -79,13 +86,13 @@ function App() {
   return (
     <div className="app">
     <Header />
-    <Main
+    <Notes
     addNote={addNote}
     notes={notes}
     selectedNote={selectedNote}
     entryData={entryData}
     openEntryData={openEntryData}
-    // openFormEntryData={openFormEntryData}
+    openFormEntryData={openFormEntryData}
     />
     <Footer />
     </div>
