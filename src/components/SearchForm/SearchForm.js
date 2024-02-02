@@ -10,7 +10,7 @@ function SearchForm() {
       noValidate>
         <input
         className="form__input"
-        // value={ || ""}
+        // value={ ""|| ""}
         // onChange={handleChange}
         // onClick={onClickHandler}
         // onBlur={onOnBlur}
@@ -18,7 +18,9 @@ function SearchForm() {
         name="form-search"
         id="form-search"
         required
-        placeholder="Поиск"/>
+        placeholder="Поиск"
+        />
+        <button className='form__btn'>F</button>
       </form>
     </section>
   );

@@ -1,6 +1,5 @@
 .header {
-  border: 1px solid gray;
+  border-bottom: 1px solid #9f9f9f;
     background-color: whitesmoke;
-    border-radius: 6%;
     padding: 17px 0 17px;
 }
