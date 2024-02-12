@@ -13,6 +13,10 @@
     border-bottom: 1px solid #9f9f9f;
 }
 
+.notesList-container__card_selected {
+  background-color: aliceblue;
+}
+
 .notesList-container__name {
   margin: 0;
   padding: 0 18px;
@@ -52,4 +56,8 @@
 .notesList-container__card:hover {
   transition: 0.3s;
   opacity: 0.6;
+}
+
+.completed {
+  text-decoration: line-through;
 }

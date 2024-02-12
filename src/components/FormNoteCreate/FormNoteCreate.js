@@ -71,6 +71,7 @@ const autoResize = (textAreaRef) => {
               id="form-create-name"
               placeholder="Название"
               onInput={autoResize}
+              readOnly={selectedNote.completed}
             />
             <textarea
               ref={textTextAreaRef}
@@ -82,6 +83,7 @@ const autoResize = (textAreaRef) => {
               id="form-create-text"
               placeholder="Текст"
               autoFocus
+              readOnly={selectedNote.completed}
             />
           </form>
         ) : (

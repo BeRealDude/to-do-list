@@ -22,7 +22,7 @@ function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }
         key={note.id}
         note={note}
         openFormEntryData={() => openFormEntryData(note)}
-        // onHandleMWConfirm={() => onHandleMWConfirm(note)}
+        completed={note.completed}
         />
       )}
       </ul>

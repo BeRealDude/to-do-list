@@ -18,7 +18,6 @@ function App() {
   const [isMWConfirm, setMWConfirm] = useState(false);
 
   function handleMWConfirmOpen(note) {
-    console.log('onHandleMWConfirm called with:', selectedNote);
     setMWConfirm(true);
     setSelectedNote(note);
   }
@@ -33,7 +32,7 @@ function App() {
   }
 
   function addNote() {
-    const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date() };
+    const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date(), completed: false };
     openFormEntryData(newNote);
     setSelectedNote(newNote);
     setNotes([newNote, ...notes]);
@@ -57,6 +56,29 @@ function App() {
     setSelectedNote({})
     setOpenEntryData(false);
   }
+
+
+  function markComplete(note) {
+    setNotes((prevNotes) => {
+      const updatedNotes = prevNotes.filter(
+        (note) => note.id !== selectedNote.id
+      );
+      const updatedNote = {
+        ...selectedNote,
+        completed: !selectedNote.completed,
+      };
+
+      return updatedNote.completed
+        ? [...updatedNotes, updatedNote]
+        : [updatedNote, ...updatedNotes];
+    });
+    setSelectedNote({});
+    setOpenEntryData(false);
+  }
+
+
+console.log(selectedNote)
+
 
   const notesStor = JSON.parse(localStorage.getItem("notes"));
 
@@ -89,7 +111,7 @@ function App() {
           openEntryData={openEntryData}
           openFormEntryData={openFormEntryData}
           onHandleMWConfirm={handleMWConfirmOpen}
-
+          markComplete={markComplete}
         />
         <Footer />
       </div>
