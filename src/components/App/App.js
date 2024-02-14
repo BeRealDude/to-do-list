@@ -32,23 +32,48 @@ function App() {
   }
 
   function addNote() {
-    const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date(), completed: false };
+    const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date(), completed: false, important: false };
     openFormEntryData(newNote);
     setSelectedNote(newNote);
-    setNotes([newNote, ...notes]);
+    // setNotes([newNote, ...notes]);
+
+  const importantNotes = notes.filter(item => item.important);
+  const normalNotes = notes.filter(item => !item.important);
+
+  setNotes([...importantNotes, newNote, ...normalNotes]);
   }
 
+
+
   function entryData(note) {
+
     const currentDate = new Date();
-    const updatedNotes = [...notes];
-    const index = updatedNotes.findIndex((n) => n.id === note.id);
-    if (index !== -1) {
-      updatedNotes.splice(index, 1);
-    }
-    updatedNotes.unshift({ ...note, createdAt: currentDate });
-    setNotes(updatedNotes);
+    // const importantNotes = notes.filter(item => item.important);
+
+    setNotes((n) => {
+      const updatedNotes = n.filter(
+        (n) => n.id !== note.id && !n.important
+      );
+      const updatedNotesImportant = n.filter(
+        (n) => n.id !== note.id && n.important
+      );
+      const updatedNote = {
+        ...note,
+        createdAt: currentDate,
+      };
+
+      return !note.important
+      ?
+      [...updatedNotesImportant, updatedNote, ...updatedNotes]
+      :
+      [updatedNote, ...updatedNotesImportant, ...updatedNotes]
+
+
+    });
     setSelectedNote({ ...note, createdAt: currentDate });
   }
+
+  // localStorage.clear()
 
   function deleteNote() {
     setNotes((state) => state.filter((note) => note.id !== selectedNote.id));
@@ -58,9 +83,9 @@ function App() {
   }
 
 
-  function markComplete(note) {
-    setNotes((prevNotes) => {
-      const updatedNotes = prevNotes.filter(
+  function markComplete() {
+    setNotes((n) => {
+      const updatedNotes = n.filter(
         (note) => note.id !== selectedNote.id
       );
       const updatedNote = {
@@ -75,6 +100,29 @@ function App() {
     setSelectedNote({});
     setOpenEntryData(false);
   }
+
+function handleChangeImportant(note) {
+  setNotes((n) => {
+    const updatedNotes = n.filter(
+      (n) => n.id !== note.id && !n.important
+    );
+    const updatedNotesImportant = n.filter(
+      (n) => n.id !== note.id && n.important
+    );
+    const updatedNote = {
+      ...selectedNote,
+      important: !selectedNote.important,
+    };
+
+    return !note.important
+      ? [updatedNote, ...updatedNotesImportant, ...updatedNotes]
+      : [...updatedNotesImportant, updatedNote, ...updatedNotes];
+  });
+
+
+  setSelectedNote({});
+    setOpenEntryData(false);
+}
 
 
 console.log(selectedNote)
@@ -112,6 +160,7 @@ console.log(selectedNote)
           openFormEntryData={openFormEntryData}
           onHandleMWConfirm={handleMWConfirmOpen}
           markComplete={markComplete}
+          handleChangeImportant={handleChangeImportant}
         />
         <Footer />
       </div>

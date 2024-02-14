@@ -4,7 +4,7 @@ import NotesList from '../NotesList/NotesList';
 import SearchForm from '../SearchForm/SearchForm';
 import './Notes.css';
 
-function Notes({ addNote, notes, selectedNote, entryData, openEntryData, openFormEntryData, deleteNote, onHandleMWConfirm, markComplete }) {
+function Notes({ addNote, notes, selectedNote, entryData, openEntryData, openFormEntryData, deleteNote, onHandleMWConfirm, markComplete, handleChangeImportant }) {
 
 
   const isNoteSelected = Object.keys(selectedNote).length !== 0;
@@ -15,6 +15,7 @@ function Notes({ addNote, notes, selectedNote, entryData, openEntryData, openFor
     <main className="notes">
       <button className='notes__btn' onClick={addNote}>+ Новая заметка</button>
       <div className='tools'>
+        <button className='notes__btnImportant' onClick={() => handleChangeImportant(selectedNote)} disabled={!isNoteSelected}>&#9734;</button>
         <button className='notes__btn' onClick={() => markComplete(selectedNote)} disabled={!isNoteSelected}>{!selectedNote.completed ? 'Пометить как выполненное' : 'Вернуть'}</button>
         <button type='button' className={`notes__btn-delete ${!isNoteSelected && 'notes__btn-delete_disabled'}`} onClick={() => isNoteSelected && onHandleMWConfirm(selectedNote)} disabled={!isNoteSelected} />
       </div>

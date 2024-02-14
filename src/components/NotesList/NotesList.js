@@ -12,6 +12,7 @@ function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }
 
 
 
+  
 
 
   return (
@@ -23,6 +24,7 @@ function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }
         note={note}
         openFormEntryData={() => openFormEntryData(note)}
         completed={note.completed}
+        important={note.important}
         />
       )}
       </ul>

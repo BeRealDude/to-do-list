@@ -61,3 +61,13 @@
 .completed {
   text-decoration: line-through;
 }
+
+.notesList-container__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notesList-container__important {
+  margin-right: 5px;
+}
