@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 
@@ -7,15 +7,22 @@ import Notes from "../Notes/Notes";
 import { addWeeks, addDays } from "date-fns";
 import "./App.css";
 import ModalWindowConfirm from "../ModalWindowConfirm/ModalWindowConfirm";
+import ModalSortingMenu from "../ModalSortingMenu/ModalSortingMenu";
 
 function App() {
   const [notes, setNotes] = useState([]);
+
+  const [originalNotes, setOriginalNotes] = useState([]);
 
   const [selectedNote, setSelectedNote] = useState({});
 
   const [openEntryData, setOpenEntryData] = useState(false);
 
   const [isMWConfirm, setMWConfirm] = useState(false);
+
+  const [isOpenSortingMenu, setOpenSortingMenu] = useState(false);
+
+  const [flagSortNotes, setFlagSortNotes] = useState(false);
 
   function handleMWConfirmOpen(note) {
     setMWConfirm(true);
@@ -24,12 +31,22 @@ function App() {
 
   function closeAllModalWindows() {
     setMWConfirm(false);
+    setOpenSortingMenu(false);
   }
 
   function openFormEntryData(note) {
     setOpenEntryData(true);
     setSelectedNote(note);
   }
+
+  function openSortingMenu() {
+    setOpenSortingMenu(true);
+  }
+
+
+
+
+
 
   function addNote() {
     const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date(), completed: false, important: false };
@@ -41,6 +58,7 @@ function App() {
   const normalNotes = notes.filter(item => !item.important);
 
   setNotes([...importantNotes, newNote, ...normalNotes]);
+
   }
 
 
@@ -48,9 +66,9 @@ function App() {
   function entryData(note) {
 
     const currentDate = new Date();
-    // const importantNotes = notes.filter(item => item.important);
 
-    setNotes((n) => {
+    if(flagSortNotes === false) {
+      setNotes((n) => {
       const updatedNotes = n.filter(
         (n) => n.id !== note.id && !n.important
       );
@@ -67,13 +85,21 @@ function App() {
       [...updatedNotesImportant, updatedNote, ...updatedNotes]
       :
       [updatedNote, ...updatedNotesImportant, ...updatedNotes]
-
-
     });
     setSelectedNote({ ...note, createdAt: currentDate });
-  }
+  } else {
 
-  // localStorage.clear()
+    const updatedNotes = notes.filter(
+      (n) => n.id !== note.id && !n.important
+    );
+      const arrUpdated = [...updatedNotes, { ...note, createdAt: currentDate }]
+    setNotes(arrUpdated)
+    sortedNotesUpdate(true, arrUpdated)
+    setSelectedNote({ ...note, createdAt: currentDate });
+  }
+}
+
+
 
   function deleteNote() {
     setNotes((state) => state.filter((note) => note.id !== selectedNote.id));
@@ -83,19 +109,30 @@ function App() {
   }
 
 
-  function markComplete() {
+  function markComplete(note) {
     setNotes((n) => {
       const updatedNotes = n.filter(
-        (note) => note.id !== selectedNote.id
+        (n) => n.id !== note.id && !n.important
       );
+
+      const updatedNotesImportant = n.filter(
+        (n) => n.id !== note.id && n.important
+      );
+
       const updatedNote = {
         ...selectedNote,
         completed: !selectedNote.completed,
       };
 
-      return updatedNote.completed
-        ? [...updatedNotes, updatedNote]
-        : [updatedNote, ...updatedNotes];
+      return !note.completed && !note.important
+        ? [...updatedNotesImportant, ...updatedNotes, updatedNote]
+        :
+        note.completed && note.important
+        ?
+        [updatedNote, ...updatedNotesImportant, ...updatedNotes]
+        :
+        [...updatedNotesImportant, updatedNote, ...updatedNotes]
+
     });
     setSelectedNote({});
     setOpenEntryData(false);
@@ -126,6 +163,55 @@ function handleChangeImportant(note) {
 
 
 console.log(selectedNote)
+
+
+
+  useEffect(() => {
+    if(flagSortNotes === false)
+    setOriginalNotes([...notes]);
+  }, [notes, flagSortNotes]);
+
+
+function sortedNotesUpdate(state, arr) {
+  if (state === true) {
+    console.log(state);
+    const sortNotes = [...arr];
+    setNotes(
+      sortNotes.sort((a, b) => {
+        const nameA = String(a.name || a.text).toLowerCase();
+        const nameB = String(b.name || b.text).toLowerCase();
+        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+      })
+    );
+    closeAllModalWindows();
+  }
+}
+
+function sortedNotes() {
+  console.log('Сортирует')
+  setFlagSortNotes(true);
+  sortedNotesUpdate(true, notes);
+}
+
+function resetSorting() {
+  console.log('Возвращает прежний порядок')
+  setFlagSortNotes(false);
+
+  const resetEditedNotes = notes.map(note => (
+    selectedNote.id === note.id ? { ...note, name: selectedNote.name, text: selectedNote.text } : note
+  ));
+
+  const updatedNotes = originalNotes.map(note => {
+    const editedNote = resetEditedNotes.find(editedNote => editedNote.id === note.id);
+    return editedNote ? editedNote : note;
+  });
+
+  setNotes(updatedNotes);
+}
+
+
+console.log(notes)
+
 
 
   const notesStor = JSON.parse(localStorage.getItem("notes"));
@@ -161,6 +247,9 @@ console.log(selectedNote)
           onHandleMWConfirm={handleMWConfirmOpen}
           markComplete={markComplete}
           handleChangeImportant={handleChangeImportant}
+          openSortingMenu={openSortingMenu}
+          resetSorting={resetSorting}
+          flagSortNotes={flagSortNotes}
         />
         <Footer />
       </div>
@@ -170,6 +259,12 @@ console.log(selectedNote)
         onClose={closeAllModalWindows}
         onDelete={deleteNote}
         selectedNote={selectedNote}
+      />
+
+      <ModalSortingMenu
+      isOpen={isOpenSortingMenu}
+      closeAllModalWindows={closeAllModalWindows}
+      sortedNotes={sortedNotes}
       />
     </>
   );

@@ -3,7 +3,7 @@ import NotesCard from '../NotesCard/NotesCard';
 import './NotesList.css';
 
 
-function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }) {
+function NotesList({ notes, selectedNote, openFormEntryData }) {
 
   // let notes = [];
 
@@ -12,7 +12,7 @@ function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }
 
 
 
-  
+
 
 
   return (
@@ -25,6 +25,7 @@ function NotesList({ notes, selectedNote, openFormEntryData, onHandleMWConfirm }
         openFormEntryData={() => openFormEntryData(note)}
         completed={note.completed}
         important={note.important}
+        selectedNote={selectedNote}
         />
       )}
       </ul>

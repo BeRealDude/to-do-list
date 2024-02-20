@@ -3,11 +3,31 @@
   width: 100%;
   border-right: 1px solid #9f9f9f;
   grid-template-columns: min-content auto;
+  align-items: baseline;
+}
+
+.optionSet {
+  display: flex;
+    width: 44%;
+    height: 61%;
+    align-items: center;
+    grid-column: 2/2;
+    grid-row: 1/1;
+    margin-left: 2%;
+}
+
+.optionSet__title {
+  font-size: 15px;
+    font-weight: 500;
 }
 
 .tools {
   justify-self: self-end;
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: 2/2;
+    grid-row: 1/1;
 }
 
 .notes__btn {

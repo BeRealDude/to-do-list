@@ -14,7 +14,7 @@
   z-index: 2;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 1s, opacity 0.5s linear;
+  transition: visibility .1s, opacity .1s linear;
 }
 
 .modal-window_opened{
