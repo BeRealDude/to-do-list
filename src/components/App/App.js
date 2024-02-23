@@ -49,16 +49,26 @@ function App() {
 
 
   function addNote() {
-    const newNote = { id: uuidv4(), name: "", text: "", createdAt: new Date(), completed: false, important: false };
+    const newNote = {
+      id: uuidv4(),
+      name: "",
+      text: "",
+      createdAt: new Date(),
+      completed: false,
+      important: false,
+    };
     openFormEntryData(newNote);
     setSelectedNote(newNote);
-    // setNotes([newNote, ...notes]);
 
-  const importantNotes = notes.filter(item => item.important);
-  const normalNotes = notes.filter(item => !item.important);
+    const importantNotes = notes.filter((item) => item.important);
+    const normalNotes = notes.filter((item) => !item.important);
+    const copyNotes = [...notes]
 
-  setNotes([...importantNotes, newNote, ...normalNotes]);
-
+    if (flagSortNotes === false) {
+      setNotes([...importantNotes, newNote, ...normalNotes]);
+    } else {
+      setNotes([newNote, ...copyNotes]);
+    }
   }
 
 
@@ -90,7 +100,7 @@ function App() {
   } else {
 
     const updatedNotes = notes.filter(
-      (n) => n.id !== note.id && !n.important
+      (n) => n.id !== note.id
     );
       const arrUpdated = [...updatedNotes, { ...note, createdAt: currentDate }]
     setNotes(arrUpdated)
@@ -103,6 +113,7 @@ function App() {
 
   function deleteNote() {
     setNotes((state) => state.filter((note) => note.id !== selectedNote.id));
+    setOriginalNotes((state) => state.filter((note) => note.id !== selectedNote.id));
     closeAllModalWindows()
     setSelectedNote({})
     setOpenEntryData(false);
@@ -110,36 +121,42 @@ function App() {
 
 
   function markComplete(note) {
-    setNotes((n) => {
-      const updatedNotes = n.filter(
-        (n) => n.id !== note.id && !n.important
-      );
+    if (flagSortNotes === false) {
+      setNotes((n) => {
+        const updatedNotes = n.filter((n) => n.id !== note.id && !n.important);
 
-      const updatedNotesImportant = n.filter(
-        (n) => n.id !== note.id && n.important
-      );
-
+        const updatedNotesImportant = n.filter(
+          (n) => n.id !== note.id && n.important
+        );
+        const updatedNote = {
+          ...selectedNote,
+          completed: !selectedNote.completed,
+        };
+        return !note.completed && !note.important
+          ? [...updatedNotesImportant, ...updatedNotes, updatedNote]
+          : note.completed && note.important
+          ? [updatedNote, ...updatedNotesImportant, ...updatedNotes]
+          : [...updatedNotesImportant, updatedNote, ...updatedNotes];
+      });
+    } else {
+      const updatedNotes = notes.filter((n) => n.id !== note.id);
       const updatedNote = {
         ...selectedNote,
         completed: !selectedNote.completed,
       };
+      const arrUpdated = [...updatedNotes, updatedNote];
+      setNotes(arrUpdated);
+      sortedNotesUpdate(true, arrUpdated);
+    }
 
-      return !note.completed && !note.important
-        ? [...updatedNotesImportant, ...updatedNotes, updatedNote]
-        :
-        note.completed && note.important
-        ?
-        [updatedNote, ...updatedNotesImportant, ...updatedNotes]
-        :
-        [...updatedNotesImportant, updatedNote, ...updatedNotes]
-
-    });
     setSelectedNote({});
     setOpenEntryData(false);
   }
 
 function handleChangeImportant(note) {
-  setNotes((n) => {
+
+    if(flagSortNotes === false) {
+      setNotes((n) => {
     const updatedNotes = n.filter(
       (n) => n.id !== note.id && !n.important
     );
@@ -150,11 +167,22 @@ function handleChangeImportant(note) {
       ...selectedNote,
       important: !selectedNote.important,
     };
-
     return !note.important
       ? [updatedNote, ...updatedNotesImportant, ...updatedNotes]
       : [...updatedNotesImportant, updatedNote, ...updatedNotes];
-  });
+  })
+} else {
+  const updatedNotes = notes.filter(
+    (n) => n.id !== note.id
+  );
+  const updatedNote = {
+    ...selectedNote,
+    important: !selectedNote.important,
+  };
+  const arrUpdated = [...updatedNotes, updatedNote]
+    setNotes(arrUpdated)
+    sortedNotesUpdate(true, arrUpdated)
+}
 
 
   setSelectedNote({});
@@ -194,19 +222,31 @@ function sortedNotes() {
 }
 
 function resetSorting() {
-  console.log('Возвращает прежний порядок')
+  console.log("Возвращает прежний порядок");
   setFlagSortNotes(false);
 
-  const resetEditedNotes = notes.map(note => (
-    selectedNote.id === note.id ? { ...note, name: selectedNote.name, text: selectedNote.text } : note
-  ));
+  const resetEditedNotes = notes.map((note) => {
+    return selectedNote.id === note.id
+      ? { ...note, name: selectedNote.name, text: selectedNote.text }
+      : note;
+  });
 
-  const updatedNotes = originalNotes.map(note => {
-    const editedNote = resetEditedNotes.find(editedNote => editedNote.id === note.id);
+  const updatedNotes = originalNotes.map((note) => {
+    const editedNote = resetEditedNotes.find(
+      (editedNote) => editedNote.id === note.id
+    );
     return editedNote ? editedNote : note;
   });
 
-  setNotes(updatedNotes);
+  const newNotes = resetEditedNotes.filter(
+    (note) => !originalNotes.some((originalNote) => originalNote.id === note.id)
+  );
+
+  const updatedImportantNotes = updatedNotes.filter((note) => note.important);
+  const updatedCompletedNotes = updatedNotes.filter((note) => note.completed);
+  const updatedNormalNotes = updatedNotes.filter((note) => !note.important && !note.completed);
+ 
+  setNotes([...updatedImportantNotes, ...newNotes, ...updatedNormalNotes, ...updatedCompletedNotes]);
 }
 
 
