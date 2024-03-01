@@ -1,0 +1,83 @@
+.notes{
+  display: grid;
+  width: 100%;
+  border-right: 1px solid #9f9f9f;
+  grid-template-columns: min-content auto;
+  align-items: baseline;
+}
+
+.optionSet {
+  display: flex;
+    width: 44%;
+    height: 61%;
+    align-items: center;
+    grid-column: 2/2;
+    grid-row: 1/1;
+    margin-left: 2%;
+}
+
+.optionSet__title {
+  font-size: 15px;
+    font-weight: 500;
+}
+
+.tools {
+  justify-self: self-end;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: 2/2;
+    grid-row: 1/1;
+}
+
+.notes__btn {
+  width: 201px;
+    height: 54px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #9f9f9f;
+    border-right: 1px solid #9f9f9f;
+}
+
+.notes__btn:hover {
+  transition: 0.3s;
+  opacity: 0.6;
+}
+
+.notes__btn-delete {
+  background-image: url('../../images/btn__delete.svg');
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #DADAE9;
+  padding: 0;
+  margin: 0 2% 0 0;
+  justify-self: end;
+  background-repeat: no-repeat;
+  align-self: self-end;
+}
+
+.notes__btn-delete:hover {
+  transition: 0.3s;
+  opacity: 0.6;
+}
+
+.notes__btn-delete_disabled {
+  color: gray;
+}
+
+.notes__btn-delete_disabled:hover {
+  opacity: 1;
+  cursor: auto;
+}
+
+.notes__btn-delete_disabled:focus {
+  outline: 2px solid red;
+  outline-offset: 3px;
+}

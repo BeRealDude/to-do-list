@@ -1,0 +1,83 @@
+.notesList-container__card {
+  height: 55px;
+    width: 200px;
+    border-right: 0;
+    border-left: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+
+    text-align: left;
+    border-bottom: 1px solid #9f9f9f;
+}
+
+.notesList-container__card_selected {
+  background-color: aliceblue;
+}
+
+.notesList-container__name {
+  margin: 0;
+  padding: 0 18px;
+  font-size: 18px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.notesList-container__wrapp {
+  display: flex;
+    flex-direction: row-reverse;
+    padding: 0 18px;
+    justify-content: flex-end;
+}
+
+.notesList-container__text {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: 4%;
+}
+
+.notesList-container__date {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: #9f9f9f;
+}
+
+.notesList-container__card:hover {
+  transition: 0.3s;
+  opacity: 0.6;
+  background-color: #c8d0ff;
+}
+
+.notesList-container__card:active{
+background-color: #c8d0ff;
+opacity: 0.9;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.selected {
+  background-color: #c8d0ff;
+}
+
+.notesList-container__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notesList-container__important {
+  margin-right: 5px;
+}
