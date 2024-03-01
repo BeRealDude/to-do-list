@@ -1,19 +1,20 @@
 {
   "files": {
-    "main.css": "/to-do-list/static/css/main.ff9d6ce3.css",
-    "main.js": "/to-do-list/static/js/main.0f20c68c.js",
+    "main.css": "/to-do-list/static/css/main.9df3fec1.css",
+    "main.js": "/to-do-list/static/js/main.f036a312.js",
     "static/media/Inter-Medium.woff": "/to-do-list/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
     "static/media/Inter-Black.woff": "/to-do-list/static/media/Inter-Black.c6938660eec019fefd68.woff",
     "static/media/Inter-Regular.woff": "/to-do-list/static/media/Inter-Regular.8c206db99195777c6769.woff",
     "static/media/Inter-Medium.woff2": "/to-do-list/static/media/Inter-Medium.293fd13dbca5a3e450ef.woff2",
     "static/media/Inter-Black.woff2": "/to-do-list/static/media/Inter-Black.15ca31c0a2a68f76d2d1.woff2",
     "static/media/Inter-Regular.woff2": "/to-do-list/static/media/Inter-Regular.c8ba52b05a9ef10f4758.woff2",
+    "static/media/btn__delete.svg": "/to-do-list/static/media/btn__delete.7ab65640c2f8a5357e3a.svg",
     "index.html": "/to-do-list/index.html",
-    "main.ff9d6ce3.css.map": "/to-do-list/static/css/main.ff9d6ce3.css.map",
-    "main.0f20c68c.js.map": "/to-do-list/static/js/main.0f20c68c.js.map"
+    "main.9df3fec1.css.map": "/to-do-list/static/css/main.9df3fec1.css.map",
+    "main.f036a312.js.map": "/to-do-list/static/js/main.f036a312.js.map"
   },
   "entrypoints": [
-    "static/css/main.ff9d6ce3.css",
-    "static/js/main.0f20c68c.js"
+    "static/css/main.9df3fec1.css",
+    "static/js/main.f036a312.js"
   ]
 }
