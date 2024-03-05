@@ -1,6 +1,6 @@
 import './ModalSortingMenu.css'
 
-function ModalSortingMenu({ isOpen, closeAllModalWindows, sortedNotes }) {
+function ModalSortingMenu({ isOpen, closeAllModalWindows, sortAlphabetBtn }) {
 
   function close(e) {
     e.target === e.target.closest('.modal-sortingMenu') && closeAllModalWindows()
@@ -12,7 +12,7 @@ function ModalSortingMenu({ isOpen, closeAllModalWindows, sortedNotes }) {
         <h2 className="modal-sortingMenu__heading">Порядок сортировки</h2>
         <button
             className="modal-sortingMenu__btn"
-            onClick={sortedNotes}
+            onClick={sortAlphabetBtn}
           >
             По алфавиту
           </button>
